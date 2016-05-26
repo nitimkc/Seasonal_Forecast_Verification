@@ -18,23 +18,25 @@ library(s2dverification)
 
 
 # load data
+# ---------
+
 NovEnsembleData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovEnsembleData.rds")
 MayEnsembleData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayEnsembleData.rds")
 
 
 
-
 # calc avg over 3 months for exp and obs
 # --------------------------------------
+
 # this part is not necessary because we will compare avgs over the models
 # avg of 4 models in EUROSIP vs avg of 5 models in ENSEMBLE
 
-#EnsemDJFmeanExp <- MeanListDim(NovEnsembleData$mod, narm = T, c(2,4))
-#EnsemDJFmeanObs <- MeanListDim(NovEnsembleData$obs, narm = T, c(2,4))
+EnsemDJFmeanExp <- MeanListDim(NovEnsembleData$mod, narm = T, c(2,4))
+EnsemDJFmeanObs <- MeanListDim(NovEnsembleData$obs, narm = T, c(2,4))
 #dim(EnsemDJFmeanObs)
 
-#EnsemJJAmeanExp <- MeanListDim(MayEnsembleData$mod, narm = T, c(2,4))
-#EnsemJJAmeanObs <- MeanListDim(MayEnsembleData$obs, narm = T, c(2,4))
+EnsemJJAmeanExp <- MeanListDim(MayEnsembleData$mod, narm = T, c(2,4))
+EnsemJJAmeanObs <- MeanListDim(MayEnsembleData$obs, narm = T, c(2,4))
 #dim(EnsemJJAmeanObs)
 
 
@@ -43,27 +45,30 @@ MayEnsembleData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayEnsemb
 # calc avg over all 4 models
 # ---------------------------
 
-EnsemAvgDJFExp <- MeanListDim(NovEnsembleData$mod, narm = T, c(1,2,4))
+c<- MeanListDim(NovEnsembleData$mod, narm = T, c(1,2,4))
 EnsemAvgDJFObs <- MeanListDim(NovEnsembleData$obs, narm = T, c(1,2,4))
-dim(EnsemAvgDJFExp)
-dim(EnsemAvgDJFObs)
+#dim(EnsemAvgDJFExp)
+#dim(EnsemAvgDJFObs)
 
 EnsemAvgJJAExp <- MeanListDim(NovEnsembleData$mod, narm = T, c(1,2,4))
 EnsemAvgJJAObs <- MeanListDim(NovEnsembleData$obs, narm = T, c(1,2,4))
-dim(EnsemAvgJJAExp)
-dim(EnsemAvgJJAObs)
+#dim(EnsemAvgJJAExp)
+#dim(EnsemAvgJJAObs)
+
 
 ##################### NOW CALCULATE THE DIFF BETWEEN ENSEMBLE & EUROSIP ###################
 
-
 # calc corr
 # ---------
-corrDJF <- Corr(DJFmeanExp, DJFmeanObs , posloop = 1, poscor = 2) 
-corrJJA <- Corr(JJAmeanExp, JJAmeanObs , posloop = 1, poscor = 2) 
 
+corrDJF <- Corr(EnsemAvgDJFExp, EnsemAvgDJFObs , posloop = 1, poscor = 2) 
+corrJJA <- Corr(EnsemAvgJJAExp, EnsemAvgJJAObs , posloop = 1, poscor = 2) 
 
-AvgcorrDJF <- Corr(AvgDJFExp, AvgDJFObs, posloop = 1, poscor = 1) 
-AvgcorrJJA <- Corr(AvgJJAExp, AvgJJAObs, posloop = 1, poscor = 1) 
+# calc corr for avg over model
+# ----------------------------
+
+AvgcorrDJF <- Corr(EnsemAvgDJFExp, EnsemAvgDJFObs, posloop = 1, poscor = 1) 
+AvgcorrJJA <- Corr(EnsemAvgJJAExp, EnsemAvgJJAObs, posloop = 1, poscor = 1) 
 
 
 
