@@ -17,8 +17,8 @@ library(easyVerification)
 # load data
 # ----------
 
-NovStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovStartData.rds")
-MayStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayStartData.rds")
+#NovStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovStartData.rds")
+#MayStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayStartData.rds")
 
 
 
@@ -26,18 +26,18 @@ MayStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayStartData
 # average over season
 # --------------------
 
-DJF.Exp <- Mean1Dim(NovStartData$mod, 4) 
-DJF.Obs <- Mean1Dim(NovStartData$obs, 4)
+#DJF.Exp <- Mean1Dim(NovStartData$mod, 4) 
+#DJF.Obs <- Mean1Dim(NovStartData$obs, 4)
 
-JJA.Exp <- Mean1Dim(MayStartData$mod, 4) 
-JJA.Obs <- Mean1Dim(MayStartData$obs, 4)
+#JJA.Exp <- Mean1Dim(MayStartData$mod, 4) 
+#JJA.Obs <- Mean1Dim(MayStartData$obs, 4)
 
   # save
-  saveRDS(DJF.Exp, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJF.Exp.rds")
-  saveRDS(DJF.Obs, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJF.Obs.rds")
+  #saveRDS(DJF.Exp, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJF.Exp.rds")
+  #saveRDS(DJF.Obs, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJF.Obs.rds")
 
-  saveRDS(JJA.Exp, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJA.Exp.rds")
-  saveRDS(JJA.Obs, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJA.Obs.rds")
+  #saveRDS(JJA.Exp, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJA.Exp.rds")
+  #saveRDS(JJA.Obs, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJA.Obs.rds")
 
 
   # read
@@ -64,7 +64,7 @@ JJA.Obs <- Mean1Dim(MayStartData$obs, 4)
   CRPSS.NCEP.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[3,1:24,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2) 
   CRPSS.MF.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[4,1:15,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2) 
 
-
+# Move to 3.4.CrpsPlot.R
   
 ### ----------------------------------ERRORS TO LOOK INTO ----------------------------------
 ### 
