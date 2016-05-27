@@ -50,20 +50,20 @@ Lon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
   
 
 
-# replace values less than 0 with NA
+# replace values less than -1 with NA
 # -----------------------------------
 
-CRPSS.GloSea5.DJF$crpss[CRPSS.GloSea5.DJF$crpss < 0] <- NA
-CRPSS.GloSea5.JJA$crpss[CRPSS.GloSea5.JJA$crpss < 0] <- NA
+CRPSS.GloSea5.DJF$crpss[CRPSS.GloSea5.DJF$crpss < -1] <- NA
+CRPSS.GloSea5.JJA$crpss[CRPSS.GloSea5.JJA$crpss < -1] <- NA
 
-CRPSS.ECMWF.DJF$crpss[CRPSS.ECMWF.DJF$crpss < 0] <- NA
-CRPSS.ECMWF.JJA$crpss[CRPSS.ECMWF.JJA$crpss < 0] <- NA
+CRPSS.ECMWF.DJF$crpss[CRPSS.ECMWF.DJF$crpss < -1] <- NA
+CRPSS.ECMWF.JJA$crpss[CRPSS.ECMWF.JJA$crpss < -1] <- NA
 
-CRPSS.NCEP.DJF$crpss[CRPSS.NCEP.DJF$crpss < 0] <- NA
-CRPSS.NCEP.JJA$crpss[CRPSS.NCEP.JJA$crpss < 0] <- NA
+CRPSS.NCEP.DJF$crpss[CRPSS.NCEP.DJF$crpss < -1] <- NA
+CRPSS.NCEP.JJA$crpss[CRPSS.NCEP.JJA$crpss < -1] <- NA
 
-CRPSS.MF.DJF$crpss[CRPSS.MF.DJF$crpss < 0] <- NA
-CRPSS.MF.JJA$crpss[CRPSS.MF.JJA$crpss < 0] <- NA
+CRPSS.MF.DJF$crpss[CRPSS.MF.DJF$crpss < -1] <- NA
+CRPSS.MF.JJA$crpss[CRPSS.MF.JJA$crpss < -1] <- NA
 
 
 
@@ -71,9 +71,13 @@ CRPSS.MF.JJA$crpss[CRPSS.MF.JJA$crpss < 0] <- NA
 # map interval/colors
 # -------------------
 
-int <- seq(0,1,.2)
+int <- seq(-1, 1, 0.1)
 ncols <- length(int) -1
-int.col <- c(hcl(10, l=seq(99,20,length=ncols), c=seq(30,70,length=ncols)))
+int.col <- c(hcl(240, l=seq(20,99,length=ncols/2), c=seq(70,30,length=ncols/2)),
+             hcl(10, l=seq(99,20,length=ncols/2), c=seq(30,70,length=ncols/2)))
+
+
+
 
 # plot for Nov
 # ------------  
@@ -90,7 +94,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.GloSea5.DJF$crpss, Lon, Lat,
             toptitle = "CRPSS GloSea5 Winter", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot1))
@@ -98,7 +102,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.ECMWF.DJF$crpss, Lon, Lat,
             toptitle = "CRPSS ECMWF Winter", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot2))
@@ -106,7 +110,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.NCEP.DJF$crpss, Lon, Lat,
             toptitle = "CRPSS NCEP Winter", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot3))
@@ -114,7 +118,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.MF.DJF$crpss, Lon, Lat,
             toptitle = "CRPSS MF Winter", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot4))
@@ -124,7 +128,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.GloSea5.DJF$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS GloSea5 Winter", sizetit = 0.5,
   #          brks = int, 
-  #          cols = int.col, 
+  #          cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot5))
@@ -132,7 +136,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.ECMWF.DJF$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS ECMWF Winter", sizetit = 0.5,
   #          brks = int, 
-  #          cols = int.col, 
+  #          cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot6))
@@ -140,7 +144,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.NCEP.DJF$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS NCEP Winter", sizetit = 0.5,
   #          brks = int, 
-  #          cols = int.col, 
+  #          cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot7))
@@ -148,7 +152,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.MF.DJF$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS MF Winter", sizetit = 0.5,
   #          brks = int, 
-  #          cols = int.col, 
+  #          cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot8))
@@ -177,7 +181,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.GloSea5.JJA$crpss, Lon, Lat,
             toptitle = "CRPSS GloSea5 Summer", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot9))
@@ -185,7 +189,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.ECMWF.JJA$crpss, Lon, Lat,
             toptitle = "CRPSS ECMWF Summer", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot10))
@@ -193,7 +197,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.NCEP.JJA$crpss, Lon, Lat,
             toptitle = "CRPSS NCEP Summer", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot11))
@@ -201,7 +205,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   PlotEquiMap(CRPSS.MF.JJA$crpss, Lon, Lat,
             toptitle = "CRPSS MF Summer", sizetit = 0.5,
             brks = int, 
-            cols = int.col, 
+            cols = int.col, colNA = "lightgrey",
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot12))
@@ -211,7 +215,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.GloSea5.JJA$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS GloSea5 Summer", sizetit = 0.5,
   #          brks = int, 
-  #          cols = int.col, 
+  #          cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot13))
@@ -219,7 +223,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.ECMWF.JJA$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS ECMWF Summer", sizetit = 0.5,
   #          brks = int, 
-  #          cols = int.col, 
+  #          cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot14))
@@ -227,7 +231,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.NCEP.JJA$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS NCEP Summer", sizetit = 0.5,
   #          brks = int, 
-  #          cols = int.col, 
+  #          cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot15))
@@ -235,7 +239,7 @@ layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE),
   #PlotEquiMap(PrCRPSS.MF.JJA$crpss, Lon, Lat,
   #          toptitle = "prlr CRPSS MF Summer", sizetit = 0.5,
   #          brks = int, 
-  #         cols = int.col, 
+  #         cols = int.col, colNA = "lightgrey",
   #          drawleg = FALSE, numbfig = 4, axelab = FALSE,
   #          #labW = FALSE, intylat = 20, intxlon = 20,
   #          filled.continents = FALSE, square = TRUE, dots=t(dot16))
