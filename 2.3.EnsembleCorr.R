@@ -1,6 +1,6 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Use for data manipulation and mapping 
-# for TEMPERATURE data ONLY
+# for PRECIPITATION DATA ONLY
 # ENSEMBLES data to compare with EUROSIP
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

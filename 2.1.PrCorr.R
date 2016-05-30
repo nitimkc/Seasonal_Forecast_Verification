@@ -1,6 +1,6 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Use for data manipulation and mapping 
-# for NOVEMBER start date ONLY
+# Use for data manipulation for mapping 
+# 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
@@ -48,30 +48,6 @@ PrJJAmeanObs <- MeanListDim(PrMayStartData$obs, narm = T, c(2,4))
   PrJJAmeanExp <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/PrJJAmeanExp.rds")
   PrJJAmeanObs <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/PrJJAmeanObs.rds")
 
-
-
-# calc avg over all 4 models
-# ---------------------------
-
-PrAvgDJFExp <- Mean1Dim(PrDJFmeanExp, 1)
-PrAvgDJFObs <- Mean1Dim(PrDJFmeanObs, 1)
-
-PrAvgJJAExp <- Mean1Dim(PrJJAmeanExp, 1)
-PrAvgJJAObs <- Mean1Dim(PrJJAmeanObs, 1)
-
-  #save
-  saveRDS(PrAvgDJFExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgDJFExp.rds")
-  saveRDS(PrAvgDJFObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgDJFObs.rds")
-
-  saveRDS(PrAvgJJAExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgJJAExp.rds")
-  saveRDS(PrAvgJJAObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgJJAObs.rds")
-
-  # read
-  PrAvgDJFExp <- readRDS(PrAvgDJFExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgDJFExp.rds")
-  PrAvgDJFObs <- readRDS(PrAvgDJFObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgDJFObs.rds")
-
-  PrAvgJJAExp <- readRDS(PrAvgJJAExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgJJAExp.rds")
-  PrAvgJJAobs <- readRDS(PrAvgJJAObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgJJAObs.rds")
 
 
 

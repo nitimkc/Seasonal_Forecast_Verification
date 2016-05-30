@@ -5,15 +5,14 @@
 
 setwd("/esnas/scratch/nmishra/s2dv_test/plots")
 
-#library(s2dverification)
-#library(easyVerification)
+library(s2dverification)
+library(easyVerification)
 
 source("/esnas/scratch/nmishra/s2dv_test/3.0.ColorBar.R")
 
+
 # load data
 # ---------
-
-# continue from 2.4.Crps.R
 
 Lat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLat.rds")
 Lon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
