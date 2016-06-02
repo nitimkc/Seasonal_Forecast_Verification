@@ -29,6 +29,8 @@ Mayend <- as.Date("20120501", "%Y%m%d")
 Maydateseq <- format(seq(Maystart, Mayend, by = "year"), "%Y%m%d")
 
 
+
+
 # MASKS
 # ------
 
@@ -41,6 +43,9 @@ Maydateseq <- format(seq(Maystart, Mayend, by = "year"), "%Y%m%d")
   close.ncdf(fnc)
   maskobs[which(is.na(maskobs))] <- 1 
   listmaskobs=list(maskobs) 
+
+
+
 
 # 1. Glosea5
 # ----------

@@ -47,8 +47,8 @@ LakeComo.JJA.exp <- readRDS("/esnas/scratch/nmishra/s2dv_test/LakeComo/LakeComo.
 
 
 
-# 3. crpss
-# ---------
+# 3. calc crpss
+# -------------
 
   # avg over season
   LakeComo.DJF.seaExp <- Mean1Dim(LakeComo.DJF.exp, narm = T, 4) 
