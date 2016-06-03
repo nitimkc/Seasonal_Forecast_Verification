@@ -1,12 +1,12 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Calc Loss
-# Clim - Forecast
+# Calc Loss of each model from obs
+# Calc Difference between benchmark and ensembles
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 setwd("/esnas/scratch/nmishra/s2dv_test/SPAtests")
 library(s2dverification)
 library(abind)
-#library()
+library(plyr)
 
 
 
@@ -19,10 +19,18 @@ ts <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovStartData.rds")
 
 
 
+# corr
+# -----
+tsCorr <- Corr(ens, obs, posloop=1, poscor = 2)
+saveRDS(tsCorr, "/esnas/scratch/nmishra/s2dv_test/SPAtests/tsCorr.rds")
+
+
+
+
 # calc Climatology (benchmark model)
 # ----------------------------------
 
-Clim01 <- InsertDim(ts$obs[,,1,,,],1,1)
+Clim01 <- InsertDim(Mean1Dim(ts$obs[,,1:2,,,], posdim = 1, narm = TRUE),1,1)
 Clim02 <- InsertDim(Mean1Dim(ts$obs[,,1:2,,,], posdim = 1, narm = TRUE),1,1)
 Clim03 <- InsertDim(Mean1Dim(ts$obs[,,1:3,,,], posdim = 1, narm = TRUE),1,1)
 Clim04 <- InsertDim(Mean1Dim(ts$obs[,,1:4,,,], posdim = 1, narm = TRUE),1,1)
@@ -52,8 +60,9 @@ Clim <- abind(Clim01, Clim02, Clim03, Clim04, Clim05, Clim06, Clim07, Clim08, Cl
 
 
 
-# calc loss
-# -------------
+# calc loss based on point forecast
+# Page 4 : http://www-siepr.stanford.edu/workp/swp05003.pdf
+# ----------------------------------------------------------
 
   # prepare data
   Clim <- InsertDim(Clim, 1, 1)
@@ -65,24 +74,76 @@ Clim <- abind(Clim01, Clim02, Clim03, Clim04, Clim05, Clim06, Clim07, Clim08, Cl
   ens <- abind(Clim, Mod1,Mod2,Mod3,Mod4, along=1) # [1]   119  21   3  71 128
   obs <- InsertDim(ts$obs[,,,,,], 1, 1)            # [1]     1  21   3  71 128
   
-  
-  # calc loss
+  # calc loss   
   dimens <- dim(ens)
   nens <- dimens[1]
-  bias <- array(0, dim=c(nens, ndates, ntime, nlat, nlon))
+  ndates <- dimens[2]
+  ntime <- dimens[3] 
+  n <- (ndates*ntime)
+  nlat <- dimens[4]
+  nlon <- dimens[5]
   
+  loss <- array(NA, dim=c(nens, ndates, ntime, nlat, nlon))
   for ( i in 1:nens) {
-    bias[i,,,,] <- obs[,,,,] - ens[i,,,,]
+    loss[i,,,,] <- (obs[,,,,] - ens[i,,,,])^2
   }
   
   #save
-  saveRDS(bias, "/esnas/scratch/nmishra/s2dv_test/SPAtests/bias.rds")
+  saveRDS(loss, "/esnas/scratch/nmishra/s2dv_test/SPAtests/loss.rds")
+
+  # According to 2005 paper(pg7), exp diff is not necessary
+  # provided that mu = E(d_t)
+  #exp.loss <- array(NA, dim=c(nens, ndates, ntime, nlat, nlon))
+  #for ( i in 1:nens) {
+  #  exp.loss[i,,,,] <- ((obs[,,,,] - ens[i,,,,])^2)/(n)
+  #}
+  
+  #save
+  #saveRDS(exp.loss, "/esnas/scratch/nmishra/s2dv_test/SPAtests/exp.loss.rds")
+
+
+# calc diff from Benchmark model (119)
+# -------------------------------------
+
+Bchmrk.Forecast <- InsertDim(loss[1,,,,], 1, 1)
+Eval.Forecast <- loss[-1,,,,]
+
+
+diff <- array(NA, dim=c((nens-1), ndates, ntime, nlat, nlon))
+for ( i in 1:(nens-1)) {
+  diff[i,,,,] <- Bchmrk.Forecast[,,,,] - Eval.Forecast[i,,,,]
+}
+
+saveRDS(diff, "/esnas/scratch/nmishra/s2dv_test/SPAtests/diff.rds")
 
 
 
 
-# corr
-# -----
-tsCorr <- Corr(ens, obs, posloop=1, poscor = 2)
-saveRDS(tsCorr, "/esnas/scratch/nmishra/s2dv_test/SPAtests/tsCorr.rds")
+#### test data ###
+# testdata <- diff[1:5,,,,]
+# saveRDS(testdata, "/esnas/scratch/nmishra/s2dv_test/SPAtests/testdata.rds")
+
+# avg.testdata <- apply(testdata, 1, function(testdata) 
+#   ifelse(all(is.na(testdata)), NA, sum(testdata, na.rm = TRUE)/(n)))
+
+
+
+
+#####################
+x <- test.RC.vec[,32,1]
+h <- hist(x, breaks=10, col="red")
+xfit<-seq(min(x),max(x),length=40) 
+yfit<-dnorm(xfit,mean=mean(x),sd=sd(x)) 
+yfit <- yfit*diff(h$mids[1:2])*length(x) 
+lines(xfit, yfit, col="blue", lwd=2)
+d <- density(test.RC.vec[,32,1]) # kernel density
+plot(d)
+
+
+
+
+
+
+
+
 
