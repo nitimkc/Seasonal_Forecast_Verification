@@ -37,20 +37,20 @@ avg.diff <- apply(diff, c(1,4,5), function(diff)
 # ------------------------------------
 
 test.RC <- function(x, n) {
-  test.stat <- x*n^1/2
+  test.stat <- x*sqrt(n)
   return(test.stat)
 }
 
-test.RC.vec <- test.RC(avg.diff, n)
+testRCvec <- test.RC(avg.diff, n)
 
-test.stat.RC <- apply(test.RC.vec, c(2,3), function(test.RC.vec) 
-  ifelse(all(is.na(test.RC.vec)), NA, max(test.RC.vec, na.rm = TRUE)))
+test.stat.RC <- apply(testRCvec, c(2,3), function(testRCvec) 
+  ifelse(all(is.na(testRCvec)), NA, max(testRCvec, na.rm = TRUE)))
 
 # which model had max value per grid point?
-test.stat.RC.ind <- apply(test.RC.vec, c(2,3), function(test.RC.vec) 
-  ifelse(all(is.na(test.RC.vec)), NA, which.max(test.RC.vec)))
+test.stat.RC.ind <- apply(testRCvec, c(2,3), function(testRCvec) 
+  ifelse(all(is.na(testRCvec)), NA, which.max(testRCvec)))
 
-saveRDS(test.RC.vec, "/esnas/scratch/nmishra/s2dv_test/SPAtests/test.RC.vec.RDS")
+saveRDS(testRCvec, "/esnas/scratch/nmishra/s2dv_test/SPAtests/testRCvec.RDS")
 
 
 
