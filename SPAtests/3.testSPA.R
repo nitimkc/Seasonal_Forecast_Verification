@@ -17,36 +17,47 @@ library(reshape2)
 # load data
 # ----------
 
-diff <- readRDS("/esnas/scratch/nmishra/s2dv_test/SPAtests/diff.rds")
 test.RC.vec <- readRDS("/esnas/scratch/nmishra/s2dv_test/SPAtests/test.RC.vec.rds")
+diff <- readRDS("/esnas/scratch/nmishra/s2dv_test/SPAtests/diff.rds")
+
+ts <- readRDS("/esnas/scratch/nmishra/s2dv_test/SPAtests/ts.rds")
+avg.ts <- readRDS("/esnas/scratch/nmishra/s2dv_test/SPAtests/avg.ts.rds")
+
 n <- dim(diff)[2]*dim(diff)[3]
 m <- dim(diff)[1]
-
-
 
 
 # Constructing SPA from test statistics
 # ------------------------------------
 
-# studentized test
-# SPA = max( max( sqrt(n)*exp.diff/std.dev ), 0)
-# mu_SPA = exp.diff*ind.fnc(teststat <= correction.term)
-
 correction.term <- -sqrt(2*log(log(n)))
 
 # bootstrap to construct covar
-B <- 10
-boot.samples <- matrix(sample(test.RC.vec[,32,1], size = B, replace = TRUE), B, n)
-boot.statistics <- apply(boot.samples, 1, mean)
+ts1 <- ts[,,32,1]
 
-# does this preserve time series? of course not block wise but dimwise?
-# boot.samples <- array(sample(test.RC.vec[,32,1], size = B, replace = TRUE), c(B,21,3))
+statistics <- function(x, ind) {
+  return(mean(x[ind]))
+}
 
+# can you return a vector of sample mean for each grid point here?
+# http://people.tamu.edu/~alawing/materials/ESSM689/Btutorial.pdf
 
+B = 1000
+block = 3
+boot <- tsboot(tseries = ts1, statistic = statistics, R = B, l = 3, 
+                     sim = "fixed", endcorr = TRUE)
 
+summary(boot)
+plot(boot) # for t1*
 
-
-
+CI <- boot.ci(boot, conf = 0.95, type = 'norm')
+print(CI)
+CI_norm <- CI$normal[ ,c(2,3)]
+print(CI_norm)
+hist(boot$t[,1], main = 'Coefficient of Determination: Difference', 
+     xlab = 'what is this', col = 'grey', prob = T)
+lines(density(boot$t[,1]), col = 'blue')
+abline(v = CI_norm, col = 'red')
 
 
 
