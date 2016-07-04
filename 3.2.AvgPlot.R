@@ -6,12 +6,9 @@
 setwd("/esnas/scratch/nmishra/s2dv_test/plots")
 
 library(s2dverification)
-#library(reshape2)
-#library(hash)
-#library(RColorBrewer)
-#library(rgdal)
-#library(leaflet)
-#library(raster)
+library(easyVerification)
+
+source("/esnas/scratch/nmishra/s2dv_test/3.0.ColorBar.R")
 
 
 # load data
@@ -23,21 +20,19 @@ AvgcorrJJA <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/AvgcorrJJA.rds
 PrAvgcorrDJF <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgcorrDJF.rds")
 PrAvgcorrJJA <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgcorrJJA.rds")
 
-NovLat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLat.rds")
-NovLon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
-MayLat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayLat.rds")
-MayLon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
+Lat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/Lat.rds")
+Lon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/Lon.rds")
 
 
 
 # map interval/color
 # ------------------
 
-interval <- seq(-1, 1, 0.1)
-color=c("blue4","blue3","blue","dodgerblue3","dodgerblue2",
-        "dodgerblue1","steelblue1","cadetblue2","cadetblue1",
-        "white","white","gold","goldenrod","chocolate","orangered","firebrick1",
-        "firebrick3","firebrick","firebrick4","red4")
+int <- seq(-1, 1, 0.1)
+ncols <- length(int) -1
+int.col <- c(hcl(240, l=seq(20,99,length=ncols/2), c=seq(70,30,length=ncols/2)),
+             hcl(10, l=seq(99,20,length=ncols/2), c=seq(30,70,length=ncols/2)))
+
 
 # dot
 # ---
@@ -47,46 +42,53 @@ dot3 <- as.matrix(PrAvgcorrDJF[,,2,,]>PrAvgcorrDJF[,,4,,]) ; dot3[is.na(dot3)] <
 dot4 <- as.matrix(PrAvgcorrJJA[,,2,,]>PrAvgcorrJJA[,,4,,]) ; dot4[is.na(dot4)] <- FALSE
 
 
-# plot for Nov
-# ------------
+# plot 
+# -----
 
-postscript("Avg_Corr_OverModels.ps")
+postscript("Corr_AvgOverModels.ps")
 
-layout(matrix(c(1,2,3,4,5,5), 3, 2, byrow = TRUE), respect = TRUE,
-       widths=c(2,2), heights=c(2,2,1)) 
-#layout.show(m)
+par(mar=c(.2, 1, .2, 1))
+layout(matrix(c(1,1,2,3,4,5,6,6), 4, 2, byrow = TRUE), 
+       respect = TRUE, widths=c(3,3), heights=c(.65, 2, 2, .5)) 
+
+  #heading
+  plot.new()
+  text(0.5,0.5,"Correlation Map for Seasonal Temperature and Precipitation over Europe - \nAverage of Four Models",
+       cex=2,font=2)
+
 
 # tas
-  PlotEquiMap(AvgcorrDJF[,,2,,], NovLon, NovLat,
-            toptitle = "Winter Temperature Corr- Avg Over Models", sizetit = 0.5,
-            brks = interval, cols = color, 
+  PlotEquiMap(AvgcorrDJF[,,2,,], Lon, Lat,
+            toptitle = "Winter - Temperature", sizetit = 0.5,
+            brks = int, cols = int.col, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, dots=t(dot1))
 
-  PlotEquiMap(AvgcorrJJA[,,2,,], MayLon, MayLat,
-            toptitle = "Summer Temperature Corr- Avg Over Models", sizetit = 0.5,
-            brks = interval, cols = color, 
+  PlotEquiMap(AvgcorrJJA[,,2,,], Lon, Lat,
+            toptitle = "Summer - Temperature", sizetit = 0.5,
+            brks = int, cols = int.col, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, dots=t(dot2))
 # prlr
-  PlotEquiMap(PrAvgcorrDJF[,,2,,], NovLon, NovLat,
-            toptitle = "Winter Precipitation Corr- Avg Over Models", sizetit = 0.5,
-            brks = interval, cols = color, 
+  PlotEquiMap(PrAvgcorrDJF[,,2,,], Lon, Lat,
+            toptitle = "Winter - Precipitation", sizetit = 0.5,
+            brks = int, cols = int.col, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, dots=t(dot3))
 
-  PlotEquiMap(PrAvgcorrJJA[,,2,,], MayLon, MayLat,
-            toptitle = "Winter Summer Corr- Avg Over Models", sizetit = 0.5,
-            brks = interval, cols = color, 
+  PlotEquiMap(PrAvgcorrJJA[,,2,,], Lon, Lat,
+            toptitle = "Summer - Precipitation", sizetit = 0.5,
+            brks = int, cols = int.col, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, dots=t(dot4))
   
-  # color
-  ColorBar(interval, cols = color, vert = FALSE , subsampleg = 3, cex = 0.5)
+  # int.col
+  ColorBar(int, cols=int.col, vert=FALSE, cex = .5, tick=FALSE, 
+           upperspace=0.4, lowerspace = .6) 
 
 dev.off()
 

@@ -7,12 +7,7 @@
 setwd("/esnas/scratch/nmishra/s2dv_test")
 library(s2dverification)
 library(easyVerification)
-#library(reshape2)
-#library(hash)
-#library(RColorBrewer)
-#library(rgdal)
-#library(leaflet)
-#library(raster)
+
 
 # load data
 # ----------
@@ -43,29 +38,46 @@ library(easyVerification)
   # read
   DJF.Exp <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/DJF.Exp.rds")
   DJF.Obs <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/DJF.Obs.rds")
-
   JJA.Exp <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/JJA.Exp.rds")
   JJA.Obs <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/JJA.Obs.rds")
 
+  #DJF.Exp <- aperm(DJF.Exp, c(1,4,5,3,2)) 
+  #DJF.Obs <- aperm(DJF.Obs, c(1,4,5,3,2)) 
+  #JJA.Exp <- aperm(JJA.Exp, c(1,4,5,3,2))  
+  #JJA.Obs <- aperm(JJA.Obs, c(1,4,5,3,2)) 
 
 
+  # calc Anomalies
+  # ---------------
+  
+  clim.DJF.Exp <- Clim(DJF.Exp, DJF.Obs)
+  DJF.Exp <- Ano(DJF.Exp, clim.DJF.Exp$clim_exp)
+  DJF.Obs <- Ano(DJF.Obs, clim.DJF.Exp$clim_obs)
+  
+  clim.JJA.Exp <- Clim(JJA.Exp, JJA.Obs)
+  JJA.Exp <- Ano(JJA.Exp, clim.JJA.Exp$clim_exp)
+  JJA.Obs <- Ano(JJA.Obs, clim.JJA.Exp$clim_obs)
+  
+  
+  
 # calc CRPSS
 # -----------
   
   # winter
   CRPSS.GloSea5.DJF <- veriApply('EnsCrpss', fcst=DJF.Exp[1,1:24,,,], obs=DJF.Obs[1,,,,], ensdim=1, tdim=2) 
   CRPSS.ECMWF.DJF <- veriApply('EnsCrpss', fcst=DJF.Exp[2,,,,], obs=DJF.Obs[1,,,,], ensdim=1, tdim=2) 
-  CRPSS.NCEP.DJF <- veriApply('EnsCrpss', fcst=DJF.Exp[3,1:28,,,], obs=DJF.Obs[1,,,,], ensdim=1, tdim=2) 
-  CRPSS.MF.DJF <- veriApply('EnsCrpss', fcst=DJF.Exp[4,1:15,,,], obs=DJF.Obs[1,,,,], ensdim=1, tdim=2) 
+  CRPSS.NCEP.DJF <- veriApply('EnsCrpss', fcst=DJF.Exp[3,1:28,,,], obs=DJF.Obs[1,,,,], ensdim=1, tdim=2)  
+  CRPSS.MF.DJF <- veriApply('EnsCrpss', fcst=DJF.Exp[4,1:15,,,], obs=DJF.Obs[1,,,,], ensdim=1, tdim=2)
 
   # summer
   CRPSS.GloSea5.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[1,1:24,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2) 
-  CRPSS.ECMWF.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[2,,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2) 
-  CRPSS.NCEP.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[3,1:24,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2) 
+  CRPSS.ECMWF.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[2,,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2)
+  CRPSS.NCEP.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[3,1:24,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2)
   CRPSS.MF.JJA <- veriApply('EnsCrpss', fcst=JJA.Exp[4,1:15,,,], obs=JJA.Obs[1,,,,], ensdim=1, tdim=2) 
 
 # Move to 3.4.CrpsPlot.R
   
 ### ----------------------------------ERRORS TO LOOK INTO ----------------------------------
 ### 
+  
   

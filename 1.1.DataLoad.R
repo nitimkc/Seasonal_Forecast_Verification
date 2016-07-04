@@ -12,9 +12,9 @@ library(ncdf)
 
 # mask for MODEL
 # --------------
-
 fnc <- open.ncdf("/esnas/exp/ecearth/land_sea_mask_512x256.nc")
 lataux <- get.var.ncdf(fnc,"lat")
+lot <- get.var.ncdf(fnc,"lon")
 maskaux <- get.var.ncdf(fnc,"LSM")
 close.ncdf(fnc)
 
@@ -32,17 +32,19 @@ listmaskmod=list(maskmod, maskmod, maskmod, maskmod)
 
 
 
+
 # mask for OBSERVATION
 # --------------------
 
 #fnc <- open.ncdf("/esnas/exp/ecearth/land_sea_mask_512x256.nc")
 #maskobs <- get.var.ncdf(fnc,"LSM")
-#close.ncdf(fnc)
-#maskobs[which(is.na(maskobs))] <- 1 
+#close.ncdf(fnc)  
+#maskobs[which(is.na(maskmod))] <- 1 
 #listmaskobs=list(maskobs)
 
 
 #masklst=list("/esnas/exp/ecearth/land_sea_mask_512x256.nc")
+
 
 
 
@@ -52,6 +54,7 @@ listmaskmod=list(maskmod, maskmod, maskmod, maskmod)
   # generate dataseq for NOVEMBER start date
   # ----------------------------------------
   Novstart <- as.Date("19921101", "%Y%m%d")
+  #Novend <- as.Date("19921101", "%Y%m%d")
   Novend <- as.Date("20121101", "%Y%m%d")
   Novdateseq <- format(seq(Novstart, Novend, by = "year"), "%Y%m%d")
 
@@ -66,12 +69,12 @@ NovStartData=Load("tas", #prlr
                grid = "r512x256",
                configfile = "/home/Earth/nmishra/s2dv_test/BSC_chloe.conf")
 
-NovLat <- NovStartData$lat
-NovLon <- NovStartData$lon
+Lat <- NovStartData$lat
+Lon <- NovStartData$lon
 
 saveRDS(NovStartData, "/esnas/scratch/nmishra/s2dv_test/SavedData/NovStartData.rds")
-saveRDS(NovLat, "/esnas/scratch/nmishra/s2dv_test/SavedData/NovLat.rds")
-saveRDS(NovLon, "/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
+saveRDS(Lat, "/esnas/scratch/nmishra/s2dv_test/SavedData/Lat.rds")
+saveRDS(Lon, "/esnas/scratch/nmishra/s2dv_test/SavedData/Lon.rds")
 
 
 
@@ -96,15 +99,8 @@ MayStartData=Load("tas", #prlr
                   grid = "r512x256",
                   configfile = "/home/Earth/nmishra/s2dv_test/BSC_chloe.conf")
 
-MayLat <- MayStartData$lat
-MayLon <- MayStartData$lon
 
 saveRDS(MayStartData, "/esnas/scratch/nmishra/s2dv_test/SavedData/MayStartData.rds")
-saveRDS(MayLon, "/esnas/scratch/nmishra/s2dv_test/SavedData/MayLon.rds")
-saveRDS(MayLat, "/esnas/scratch/nmishra/s2dv_test/SavedData/MayLat.rds")
-
-
-
 
 
 

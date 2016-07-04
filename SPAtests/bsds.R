@@ -1,3 +1,5 @@
+####################################################################################################################
+
 # Calculate Whites and Hansens p-vals for out-performance using unmodified data or studentized
 # residuals, the latter often providing better power, particularly when the losses functions are
 # heteroskedastic

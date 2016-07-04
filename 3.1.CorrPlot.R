@@ -6,12 +6,7 @@
 setwd("/esnas/scratch/nmishra/s2dv_test/plots")
 
 library(s2dverification)
-#library(reshape2)
-#library(hash)
-#library(RColorBrewer)
-#library(rgdal)
-#library(leaflet)
-#library(raster)
+source("/esnas/scratch/nmishra/s2dv_test/3.0.ColorBar.R")
 
 
 # load data
@@ -23,10 +18,9 @@ corrJJA <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/corrJJA.rds")
 PrcorrDJF <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/PrcorrDJF.rds")
 PrcorrJJA <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/PrcorrJJA.rds")
 
-NovLat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLat.rds")
-NovLon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
-MayLat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayLat.rds")
-MayLon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayLon.rds")
+Lat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/Lat.rds")
+Lon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/Lon.rds")
+
 
 
 
@@ -38,11 +32,8 @@ ncols <- length(interval) -1
 color <- c(hcl(240, l=seq(20,99,length=ncols/2), c=seq(70,30,length=ncols/2)),
              hcl(10, l=seq(99,20,length=ncols/2), c=seq(30,70,length=ncols/2)))
 
-
-color=c("blue4","blue3","blue","dodgerblue3","dodgerblue2",
-        "dodgerblue1","steelblue1","cadetblue2","cadetblue1",
-        "white","white","gold","goldenrod","chocolate","orangered","firebrick1",
-        "firebrick3","firebrick","firebrick4","red4")
+breaks_plot<-c(min(CRPSS), seq(-0.9,1,by=0.1)) 
+breaks_cbar <- seq(-1, 1, by=1) 
 
 # dot
 # ---
@@ -74,73 +65,78 @@ color=c("blue4","blue3","blue","dodgerblue3","dodgerblue2",
 # plot for Nov
 # -------------
 
-postscript("Corr_Nov.ps")
+postscript("Winter_Corr.ps")
 
-layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE), 
-       respect = TRUE,
-       widths=c(3,3,3,3), heights=c(3,3,2)) 
-#layout.show(m)
+  par(mar=c(0,0,0,0))
+  layout(matrix(c(1,1,1,1,2,3,4,5,6,7,8,9,10,10,10,10), 4, 4, byrow = TRUE), 
+         respect = TRUE, widths=c(3,3,3,3), heights=c(1,3,3,1)) 
+
+  #heading
+  plot.new()
+  text(0.5,0.5,"Winter Correlation Map for Seasonal Temperature \nand Precipitation over Europe",
+       cex=2,font=2)
 
   # tas
-  PlotEquiMap(corrDJF[1,1,2,,], NovLon, NovLat,
-            toptitle = "DJF_glosea5_sea", sizetit = 0.5,
+  PlotEquiMap(corrDJF[1,1,2,,], Lon, Lat,
+            toptitle = "Temperature \nGlosea5", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot1))
 
-  PlotEquiMap(corrDJF[2,1,2,,], NovLon, NovLat,
-            toptitle = "DJF_ECMWF_S4_sea", sizetit = 0.5,
+  PlotEquiMap(corrDJF[2,1,2,,], Lon, Lat,
+            toptitle = "\nECMWF", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot2))
 
-  PlotEquiMap(corrDJF[3,1,2,,], NovLon, NovLat,
-            toptitle = "DJF_NCEP_sea", sizetit = 0.5,
+  PlotEquiMap(corrDJF[3,1,2,,], Lon, Lat,
+            toptitle = "\nNCEP", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot3))
 
-  PlotEquiMap(corrDJF[4,1,2,,], NovLon, NovLat,
-            toptitle = "DJF_MF_sea", sizetit = 0.5,
+  PlotEquiMap(corrDJF[4,1,2,,], Lon, Lat,
+            toptitle = "\nMF", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot4))
 
   # prlr
-  PlotEquiMap(PrcorrDJF[1,1,2,,], NovLon, NovLat,
-            toptitle = "prlr_glosea5_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrDJF[1,1,2,,], Lon, Lat,
+            toptitle = "Precipitation  \nGlosea5", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot5))
 
-  PlotEquiMap(PrcorrDJF[2,1,2,,], NovLon, NovLat,
-            toptitle = "prlr_ECMWF_S4_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrDJF[2,1,2,,], Lon, Lat,
+            toptitle = "\nECMWF", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot6))
 
-  PlotEquiMap(PrcorrDJF[3,1,2,,], NovLon, NovLat,
-            toptitle = "prlr_NCEP_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrDJF[3,1,2,,], Lon, Lat,
+            toptitle = "\nNCEP",  sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot7))
 
-  PlotEquiMap(PrcorrDJF[4,1,2,,], NovLon, NovLat,
-            toptitle = "prlr_MF_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrDJF[4,1,2,,], Lon, Lat,
+            toptitle = "\nMF",  sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot8))
   
   # color
-  ColorBar(interval, cols = color, vert = FALSE , subsampleg = 3, cex = 0.5)
+  ColorBar(interval, cols=color, upperspace=0.4, lowerspace = 0,
+           vert=FALSE, tick=FALSE, cex = .85)
 
 dev.off()
 
@@ -151,73 +147,80 @@ dev.off()
 # plot for May
 # -------------
 
-postscript("Corr_May.ps")
+postscript("Summer_Corr.ps")
 
-layout(matrix(c(1,2,3,4,5,6,7,8,9,9,9,9), 3, 4, byrow = TRUE), respect = TRUE,
-       widths=c(3,3,3,3), heights=c(3,3,2)) 
-#layout.show(m)
+  par(mar=c(0,0,0,0))
+  layout(matrix(c(1,1,1,1,2,3,4,5,6,7,8,9,10,10,10,10), 4, 4, byrow = TRUE), 
+         respect = TRUE, widths=c(3,3,3,3), heights=c(1,3,3,1)) 
+  
+  #heading
+  plot.new()
+  text(0.5,0.5,"Summer Correlation Map for Seasonal Temperature \nand Precipitation over Europe",
+       cex=2,font=2)
+
 
   # tas
-  PlotEquiMap(corrJJA[1,1,2,,], MayLon, MayLat,
-            toptitle = "JJA_glosea5_sea", sizetit = 0.5,
+  PlotEquiMap(corrJJA[1,1,2,,], Lon, Lat,
+            toptitle = "Temperature \nGlosea5", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot9))
 
-  PlotEquiMap(corrJJA[2,1,2,,], MayLon, MayLat,
-            toptitle = "JJA_ECMWF_S4_sea", sizetit = 0.5,
+  PlotEquiMap(corrJJA[2,1,2,,], Lon, Lat,
+            toptitle = "\nECMWF", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot10))
 
-  PlotEquiMap(corrJJA[3,1,2,,], MayLon, MayLat,
-            toptitle = "JJA_NCEP_sea", sizetit = 0.5,
+  PlotEquiMap(corrJJA[3,1,2,,], Lon, Lat,
+            toptitle = "\nNCEP", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot11))
 
-  PlotEquiMap(corrJJA[4,1,2,,], MayLon, MayLat,
-            toptitle = "JJA_MF_sea", sizetit = 0.5,
+  PlotEquiMap(corrJJA[4,1,2,,], Lon, Lat,
+            toptitle = "\nMF", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot12))
 
   # prlr
-  PlotEquiMap(PrcorrJJA[1,1,2,,], MayLon, MayLat,
-            toptitle = "prlr_glosea5_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrJJA[1,1,2,,], Lon, Lat,
+            toptitle = "Precipitation \nGlosea5", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot13))
 
-  PlotEquiMap(PrcorrJJA[2,1,2,,], MayLon, MayLat,
-            toptitle = "prlr_ECMWF_S4_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrJJA[2,1,2,,], Lon, Lat,
+            toptitle = "\nECMWF", sizetit = 0.5,
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot14))
 
-  PlotEquiMap(PrcorrJJA[3,1,2,,], MayLon, MayLat,
-            toptitle = "prlr_NCEP_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrJJA[3,1,2,,], Lon, Lat,
+            toptitle = "\nNCEP", sizetit = 0.5, 
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot15))
 
-  PlotEquiMap(PrcorrJJA[4,1,2,,], MayLon, MayLat,
-            toptitle = "prlr_MF_sea", sizetit = 0.5,
+  PlotEquiMap(PrcorrJJA[4,1,2,,], Lon, Lat,
+            toptitle = "\nMF", sizetit = 0.5, 
             brks = interval, cols = color, 
             drawleg = FALSE, numbfig = 4, axelab = FALSE,
             #labW = FALSE, intylat = 20, intxlon = 20,
             filled.continents = FALSE, square = TRUE, dots=t(dot16))
 
   # color
-  ColorBar(interval, cols = color, vert = FALSE , subsampleg = 3, cex = 0.5)
-
+  ColorBar(interval, cols=color, upperspace=0.4, lowerspace = 0,
+           vert=FALSE, tick=FALSE, cex = .85)
+  
 dev.off()
 
 

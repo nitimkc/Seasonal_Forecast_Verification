@@ -6,12 +6,7 @@
 
 setwd("/esnas/scratch/nmishra/s2dv_test")
 library(s2dverification)
-#library(reshape2)
-#library(hash)
-#library(RColorBrewer)
-#library(rgdal)
-#library(leaflet)
-#library(raster)
+
 
 
 
@@ -19,34 +14,29 @@ library(s2dverification)
 # load data
 # ----------
 
-NovStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovStartData.rds")
-MayStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayStartData.rds")
+#NovStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovStartData.rds")
+#MayStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayStartData.rds")
 
-NovLat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLat.rds")
-NovLon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
-
-MayLat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayLat.rds")
-MayLon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
-
-
+Lat <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/Lat.rds")
+Lon <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/Lon.rds")
 
 
 # calc avg over 3 months for exp and obs
 # --------------------------------------
 
-DJFmeanExp <- MeanListDim(NovStartData$mod, narm = T, c(2,4)) # winter exp
-DJFmeanObs <- MeanListDim(NovStartData$obs, narm = T, c(2,4)) # winter obs
+#DJFmeanExp <- MeanListDim(NovStartData$mod, narm = T, c(2,4)) # winter exp
+#DJFmeanObs <- MeanListDim(NovStartData$obs, narm = T, c(2,4)) # winter obs
 
-JJAmeanExp <- MeanListDim(MayStartData$mod, narm = T, c(2,4)) # summer exp
-JJAmeanObs <- MeanListDim(MayStartData$obs, narm = T, c(2,4)) # summer obs
+#JJAmeanExp <- MeanListDim(MayStartData$mod, narm = T, c(2,4)) # summer exp
+#JJAmeanObs <- MeanListDim(MayStartData$obs, narm = T, c(2,4)) # summer obs
 
 
   # save
-  saveRDS(DJFmeanExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJFmeanExp.rds")
-  saveRDS(DJFmeanObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJFmeanObs.rds")
+  #saveRDS(DJFmeanExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJFmeanExp.rds")
+  #saveRDS(DJFmeanObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/DJFmeanObs.rds")
 
-  saveRDS(JJAmeanExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJAmeanExp.rds")
-  saveRDS(JJAmeanObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJAmeanObs.rds")
+  #saveRDS(JJAmeanExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJAmeanExp.rds")
+  #saveRDS(JJAmeanObs, "/esnas/scratch/nmishra/s2dv_test/SavedData/JJAmeanObs.rds")
 
 
   # read

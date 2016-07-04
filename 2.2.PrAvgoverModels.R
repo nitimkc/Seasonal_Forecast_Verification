@@ -28,8 +28,8 @@ PrMayStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/PrMayStart
 
 PrAvgDJFExp <- MeanListDim(PrNovStartData$mod, narm = T, c(1,2,4)) # winter 
 PrAvgDJFObs <- MeanListDim(PrNovStartData$obs, narm = T, c(1,2,4))
-PrAvgJJAExp <- MeanListDim(PrNovStartData$mod, narm = T, c(1,2,4)) # summer
-PrAvgJJAObs <- MeanListDim(PrNovStartData$obs, narm = T, c(1,2,4))
+PrAvgJJAExp <- MeanListDim(PrMayStartData$mod, narm = T, c(1,2,4)) # summer
+PrAvgJJAObs <- MeanListDim(PrMayStartData$obs, narm = T, c(1,2,4))
 
   # save
   saveRDS(PrAvgDJFExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgDJFExp.rds")
@@ -48,8 +48,8 @@ PrAvgJJAObs <- MeanListDim(PrNovStartData$obs, narm = T, c(1,2,4))
 # calc corr
 # ---------
 
-PrAvgcorrDJF <- Corr(InsertDim(PrAvgDJFExp, 1, 1), InsertDim(PrAvgDJFObs, 1, 1), posloop = 1, poscor = 2)
-PrAvgcorrJJA <- Corr(InsertDim(PrAvgJJAExp, 1, 1), InsertDim(PrAvgJJAObs, 1, 1), posloop = 1, poscor = 2)
+PrAvgcorrDJF <- s2dverification::Corr(InsertDim(PrAvgDJFExp, 1, 1), InsertDim(PrAvgDJFObs, 1, 1), posloop = 1, poscor = 2)
+PrAvgcorrJJA <- s2dverification::Corr(InsertDim(PrAvgJJAExp, 1, 1), InsertDim(PrAvgJJAObs, 1, 1), posloop = 1, poscor = 2)
 
   # save
   saveRDS(PrAvgcorrDJF, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrAvgcorrDJF.rds")

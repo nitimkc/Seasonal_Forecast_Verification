@@ -16,6 +16,7 @@ library(ncdf)
 
 fnc <- open.ncdf("/esnas/exp/ecearth/land_sea_mask_512x256.nc")
 lataux <- get.var.ncdf(fnc,"lat")
+lon <- get.var.ncdf(fnc,"lon")
 maskaux <- get.var.ncdf(fnc,"LSM")
 close.ncdf(fnc)
 
@@ -30,6 +31,7 @@ maskmod[which(maskmod < 0.5)] <- 0
 
 #maskmod=t(maskmod)
 listmaskmod=list(maskmod, maskmod, maskmod, maskmod)
+
 
 
 
@@ -63,6 +65,7 @@ listmaskmod=list(maskmod, maskmod, maskmod, maskmod)
 #ECMWF_S4_sea <- list(name = 'ECMWF_S4_sea')
 #NCEP_sea <- list(name = 'NCEP_sea')
 #MF_sea <- list(name = 'MF_sea') #, dimnames = list(member = 'number'))
+
 PrNovStartData=Load("prlr", obs = "GPCP",
                     c("glosea5_sea", "ECMWF_S4_sea", "NCEP_sea", "MF_sea"),
                     sdates = Novdateseq, leadtimemin = 2, leadtimemax = 4,
@@ -72,17 +75,18 @@ PrNovStartData=Load("prlr", obs = "GPCP",
                     grid = "r512x256",
                     configfile = "/home/Earth/nmishra/s2dv_test/BSC_chloe.conf")
 
-
-NovLat <- PrNovStartData$lat
-NovLon <- PrNovStartData$lon
-
 saveRDS(PrNovStartData, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrNovStartData.rds")
-saveRDS(NovLat, "/esnas/scratch/nmishra/s2dv_test/SavedData/NovLat.rds")
-saveRDS(NovLon, "/esnas/scratch/nmishra/s2dv_test/SavedData/NovLon.rds")
 
 
 
+#######################  manually load data #####################
+sdates <- paste0(1992:2012, '1101')
+data <- Load('prlr', 'meteofrance/system4_m1', NULL, sdates, leadtimemin = 2, leadtimemax = 4, output = 'lonlat', grid = 'r512x256', maskmod = listmaskmod)
+#which(data$lon %in% lons)
+#data_crop <- data$mod[,,,,which(data$lat %in% lats),which(data$lon %in% lons)]
+data_crop <- data$mod[,,,,which(data$lat %in% lats),which(data$lon %in% lons), drop = FALSE]
 
+#######################  #################### #####################
 
 # load MAY start date seasonal data - JJA
 # ---------------------------------------
@@ -105,5 +109,16 @@ PrMayStartData=Load("prlr", obs = "GPCP",
                     configfile = "/home/Earth/nmishra/s2dv_test/BSC_chloe.conf")
 
 saveRDS(PrMayStartData, "/esnas/scratch/nmishra/s2dv_test/SavedData/PrMayStartData.rds")
-saveRDS(MayLat, "/esnas/scratch/nmishra/s2dv_test/SavedData/MayLat.rds")
-saveRDS(MayLon, "/esnas/scratch/nmishra/s2dv_test/SavedData/MayLon.rds")
+
+
+
+#######################  manually load data #####################
+sdates <- paste0(1992:2012, '0501')
+data <- Load('prlr', 'meteofrance/system4_m1', NULL, sdates, leadtimemin = 2, leadtimemax = 4, output = 'lonlat', grid = 'r512x256', maskmod = listmaskmod)
+#which(data$lon %in% lons)
+#data_crop <- data$mod[,,,,which(data$lat %in% lats),which(data$lon %in% lons)]
+data_crop <- data$mod[,,,,which(data$lat %in% lats),which(data$lon %in% lons), drop = FALSE]
+
+#######################  #################### #####################
+
+

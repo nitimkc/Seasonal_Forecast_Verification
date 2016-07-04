@@ -27,8 +27,8 @@ MayStartData <- readRDS("/esnas/scratch/nmishra/s2dv_test/SavedData/MayStartData
 
 AvgDJFExp <- MeanListDim(NovStartData$mod, narm = T, c(1,2,4)) # winter 
 AvgDJFObs <- MeanListDim(NovStartData$obs, narm = T, c(1,2,4))
-AvgJJAExp <- MeanListDim(NovStartData$mod, narm = T, c(1,2,4)) # summer
-AvgJJAObs <- MeanListDim(NovStartData$obs, narm = T, c(1,2,4))
+AvgJJAExp <- MeanListDim(MayStartData$mod, narm = T, c(1,2,4)) # summer
+AvgJJAObs <- MeanListDim(MayStartData$obs, narm = T, c(1,2,4))
 
   # save
   saveRDS(AvgDJFExp, "/esnas/scratch/nmishra/s2dv_test/SavedData/AvgDJFExp.rds")
@@ -46,8 +46,9 @@ AvgJJAObs <- MeanListDim(NovStartData$obs, narm = T, c(1,2,4))
 # calc corr for avg data
 # ----------------------
 
-AvgcorrDJF <- Corr(InsertDim(AvgDJFExp, 1, 1), InsertDim(AvgDJFObs, 1, 1), posloop = 1, poscor = 2) 
-AvgcorrJJA <- Corr(InsertDim(AvgJJAExp, 1, 1), InsertDim(AvgJJAObs, 1, 1), posloop = 1, poscor = 2)
+AvgcorrDJF <- s2dverification::Corr(var_exp=InsertDim(AvgDJFExp, 1, 1), var_obs=InsertDim(AvgDJFObs, 1, 1), posloop = 1, poscor = 2) 
+AvgcorrJJA <- s2dverification::Corr(var_exp=InsertDim(AvgJJAExp, 1, 1), var_obs=InsertDim(AvgJJAObs, 1, 1), posloop = 1, poscor = 2)
+
 
   # save
   saveRDS(AvgcorrDJF, "/esnas/scratch/nmishra/s2dv_test/SavedData/AvgcorrDJF.rds")
