@@ -1,4 +1,5 @@
 ####################################################################################################################
+
 # Implements a circular block bootstrap for bootstrapping stationary, dependent series
 
 # INPUTS: (i) DATA   - T by 1 vector of data to be bootstrapped
@@ -10,6 +11,7 @@
 
 # COMMENTS: To generate bootstrap sequences for other uses, such as bootstrapping vector processes,
 #           set DATA to t(1:N).
+
 ####################################################################################################################
 
 # test data

@@ -33,6 +33,17 @@ LakeComo.JJA.exp <- readRDS("/esnas/scratch/nmishra/s2dv_test/LakeComo/LakeComo.
   LakeComo.JJA.meanexp <- MeanListDim(LakeComo.JJA.exp, narm = T, c(2,4)) 
   LakeComo.JJA.meanobs <- MeanListDim(LakeComo.JJA.obs, narm = T, c(2,4)) 
 
+  
+  # save
+  saveRDS(LakeComo.DJF.meanobs, "/esnas/scratch/nmishra/s2dv_test/LakeComo/LakeComo.DJF.meanobs.rds")
+  saveRDS(LakeComo.DJF.meanexp, "/esnas/scratch/nmishra/s2dv_test/LakeComo/LakeComo.DJF.meanexp.rds")
+  saveRDS(LakeComo.JJA.meanobs, "/esnas/scratch/nmishra/s2dv_test/LakeComo/LakeComo.JJA.meanobs.rds")
+  saveRDS(LakeComo.JJA.meanexp, "/esnas/scratch/nmishra/s2dv_test/LakeComo/LakeComo.JJA.meanexp.rds")
+  
+
+
+
+
 
   # corr
   LakeComo.AvgcorrDJF <- Corr(InsertDim(LakeComo.DJF.meanexp, 1, 1), 
